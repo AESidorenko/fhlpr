@@ -21,6 +21,5 @@ services:
 
   frontend-admin:
     build:
-      context: ./frontend-admin/docker/php
-    volumes:
-      - ./frontend-admin:/code
+      context: ./frontend-admin
+      dockerfile: docker/php/Dockerfile
