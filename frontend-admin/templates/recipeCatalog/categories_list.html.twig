@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{% if parent is not null %}
+    <&nbsp;<a href="/recipe/catalog/{{ parent.id }}">{{ parent.title }}</a>
+{% endif %}
+
+{% if parent is null and not isRoot %}
+    <&nbsp;<a href="/recipe/catalog">To top</a>
+{% endif %}
+
+{% if isRoot %}
+    Catalog
+{% endif %}
+
+<ul>
+{% for item in categories|sort((a, b) => a.type <=> b.type)  %}
+    <li>
+    {% if item.type == constant('App\\Entity\\RecipeCatalog\\CategoryTypeEnum::CONTAINER').value %}
+    >&nbsp;
+    {% endif %}
+        <a href="/recipe/catalog/{{ item.id }}">{{ item.title }}</a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
