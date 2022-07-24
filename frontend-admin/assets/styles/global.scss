@@ -1,0 +1,19 @@
+// customize some Bootstrap variables
+$primary: darken(#428bca, 20%);
+
+// the ~ allows you to reference things in node_modules
+@import "~bootstrap/scss/bootstrap";
+
+.category-list-folder {
+  margin: 10px;
+  padding-left: 20px;
+}
+
+.category-list-item {
+  margin: 10px;
+  padding-left: 40px;
+}
+
+.cat-workspace-container {
+  margin-top: 60px;
+}

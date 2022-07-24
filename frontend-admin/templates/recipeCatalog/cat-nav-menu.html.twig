@@ -1,0 +1,29 @@
+<h4>Каталог рецептов</h4>
+
+{% if catalog.parent is not null %}
+    <i class="fa-solid fa-arrow-left"></i><a
+        href="/recipe/catalog/{{ catalog.parent.id }}">{{ catalog.parent.title }}</a>
+{% endif %}
+
+{% if catalog.parent is null and not catalog.isRoot %}
+    <i class="fa-solid fa-arrow-left"></i><a href="/recipe/catalog">To top</a>
+{% endif %}
+
+<ul class="list-group">
+
+    {% for item in catalog.categories|sort((a, b) => a.type <=> b.type) %}
+        <li class="list-group-item">
+            {% if item.type == constant('App\\Entity\\RecipeCatalog\\CategoryTypeEnum::CONTAINER').value %}
+                <a href="/recipe/catalog/{{ item.id }}">
+                    <i class="fa-solid fa-folder-closed pe-2"></i>
+                    {{ item.title }}
+                </a>
+            {% else %}
+                <a href="/recipe/catalog/{{ item.id }}" class="ps-4">
+                    {{ item.title }}
+                </a>
+            {% endif %}
+        </li>
+    {% endfor %}
+
+</ul>

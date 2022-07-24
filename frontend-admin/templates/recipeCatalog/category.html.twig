@@ -1,4 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin-layout.html.twig' %}
 
-{% block body %}
+{% block cat_nav_menu %}
+    {% include 'recipeCatalog/cat-nav-menu.html.twig' %}
+{% endblock %}
+
+{% block cat_workspace %}
+    <div class="cat-workspace-container">
+        <h3>{{ catalog.title }}</h3>
+    </div>
 {% endblock %}

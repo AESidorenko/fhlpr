@@ -35,21 +35,36 @@ class RecipeCatalogController extends AbstractController
             throw new NotFoundHttpException('Category not found');
         }
 
-        return match ($category->getType()) {
-            CategoryTypeEnum::CONTAINER->value => $this->render('recipeCatalog/categories_list.html.twig', [
-                'isRoot' => $isRoot,
-                'title' => $category->getTitle(),
-                'categories' => $isRoot ?
-                    $this->recipeCatalogRepository->findAllRootChildren() :
-                    $category->getChildren(),
-                'parent' => $category->getParent(),
-            ]),
-            CategoryTypeEnum::RECIPE->value => $this->render('recipeCatalog/category.html.twig', [
-                'isRoot' => $isRoot,
-                'title' => $category->getTitle(),
-                'parent' => $category->getParent(),
-            ]),
-            default => throw new Exception('Unknown category type'),
-        };
+        if ($category->getType() === CategoryTypeEnum::CONTAINER->value) {
+            return $this->render('recipeCatalog/categories_list.html.twig', [
+                'catalog' => [
+                    'isRoot' => $isRoot,
+                    'title' => $category->getTitle(),
+                    'categories' => $isRoot ?
+                        $this->recipeCatalogRepository->findAllRootChildren() :
+                        $category->getChildren(),
+                    'parent' => $category->getParent(),
+                ],
+                'workspace' => [],
+            ]);
+        }
+
+        if ($category->getType() === CategoryTypeEnum::RECIPE->value) {
+            return $this->render('recipeCatalog/category.html.twig', [
+                'catalog' => [
+                    'isRoot' => $category->getParent()?->getParent() === null ?? true,
+                    'title' => $category->getParent()?->getTitle(),
+                    'categories' => ($category->getParent()?->getParent() === null ?? true) ?
+                        $this->recipeCatalogRepository->findAllRootChildren() :
+                        $category->getParent()->getChildren(),
+                    'parent' => $category->getParent()?->getParent(),
+                ],
+                'workspace' => [
+                    'category' => $category,
+                ],
+            ]);
+        }
+
+        throw new Exception('Unknown category type');
     }
 }
